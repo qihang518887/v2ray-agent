@@ -374,7 +374,7 @@ xraySelectionNeedsCertificate() {
 }
 
 isValidXHTTPTLSPort() {
-    [[ "${1:-}" =~ ^[0-9]+$ ]] && ((10#${1} >= 10000 && 10#${1} <= 30000))
+    [[ "${1:-}" =~ ^[0-9]+$ ]] && ((10#${1} >= 1 && 10#${1} <= 65535 && 10#${1} != 45988))
 }
 
 buildXrayXHTTPTLSConfig() {
@@ -4420,7 +4420,7 @@ EOF
 
 # sing-box Tuic安装
 singBoxTuicInstall() {
-    if ! echo "${currentInstallProtocolType}" | grep -qE ",0,|,1,|,2,|,3,|,4,|,5,|,6,|,9,|,10,"; then
+    if ! echo "${currentInstallProtocolType}" | grep -qE ",0,|,1,|,2,|,3,|,4,|,5,|,6,|,9,|,10,|,14,"; then
         echoContent red "\n ---> 由于需要依赖证书，如安装Tuic，请先安装带有TLS标识协议"
         exit 0
     fi
@@ -4436,7 +4436,7 @@ singBoxTuicInstall() {
 
 # sing-box hy2安装
 singBoxHysteria2Install() {
-    if ! echo "${currentInstallProtocolType}" | grep -qE ",0,|,1,|,2,|,3,|,4,|,5,|,6,|,9,|,10,"; then
+    if ! echo "${currentInstallProtocolType}" | grep -qE ",0,|,1,|,2,|,3,|,4,|,5,|,6,|,9,|,10,|,14,"; then
         echoContent red "\n ---> 由于需要依赖证书，如安装Hysteria2，请先安装带有TLS标识协议"
         exit 0
     fi
@@ -11930,7 +11930,7 @@ initXrayXHTTPTLSPort() {
         xHTTPTLSPort=${xrayVLESSXHTTPTLSPort}
     fi
     if [[ -z "${xHTTPTLSPort}" ]]; then
-        read -r -p "请输入XHTTP TLS公网TCP端口[回车随机10000-30000]:" xHTTPTLSPort
+        read -r -p "请输入XHTTP TLS公网TCP端口(如8443)[回车随机10000-30000]:" xHTTPTLSPort
     fi
     if [[ -z "${xHTTPTLSPort}" ]]; then
         local attempts=0
